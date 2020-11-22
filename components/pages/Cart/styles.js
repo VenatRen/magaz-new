@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         width: Dimensions.get("window").width,
     },
+    emptyText: {
+        marginTop: 18,
+        color: "#fff",
+        fontSize: 24,
+        textAlign: "center",
+    },
     cartIcon: {
         width: 140,
         borderBottomWidth: 1,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
-import { addImage, getImage } from "../../db_handler";
+import { addImageToDB, getImageFromDB } from "../../db_handler";
 import OurText from "../OurText";
 import styles from "./styles";
 
@@ -18,7 +18,7 @@ const OurImage = (props) => {
                 reader.readAsDataURL(data);
                 reader.onload = () => {
                     setImage(reader.result);
-                    addImage(url, reader.result);
+                    addImageToDB(url, reader.result);
                 };
             });
         } else {
@@ -35,7 +35,7 @@ const OurImage = (props) => {
 
     useEffect( () => {
         if ( url )
-            getImage(url, onSuccess, onFail);
+            getImageFromDB(url, onSuccess, onFail);
     }, []);
     
 

@@ -1,30 +1,49 @@
 const ru = {
     translation: {
-        categoryListTitle: "Наш прекрасный Магазин",
+        categoryListTitle: "Наш Магазин",
 
         activityAborted: "Действие отменено.",
         activityAbortedRefresh: "Обновить",
 
         cartTitle: "Корзина",
-        cartPcs: "{{count}} шт.",
+        cartPcs: "Количество: {{quantity}} шт.",
         cartTotal: "Итого: {{total}}{{currency}}",
         cartCheckout: "Оформить заказ",
         cartDeleteTitle: "Удалить из корзины",
         cartDeleteMessage: "Вы действительно хотите удалить товар из корзины?",
-        cartEmpty: "Товаров нет.",
-        cancel: "Отмена",
-        ok: "Ок",
-        
-        deliveryDetailsTitle: "Delivery Details",
-        completedOrdersTitle: "Выполненые заказы",
+        cartEmpty: "Здесь пусто(",
 
-        orderFormName: "Имя:",
-        orderFormPhoneNum: "Телефон:",
-        orderFormAddress: "Адрес:",
-        orderFormFloor: "Этаж:",
+        cancel: "Отмена",
+        close: "Закрыть",
+        ok: "Ок",
+
+        appInfo: "Версия: {{version}}\n\nАвторы:\nVladislav Drogin\nSergey Nameless\nDanil Stavnichiy\nMaxim Saryev",
+
+        notAvailable: "н/д",
+
+        deliveryDetailsTitle: "Детали доставки",
+        completedOrdersTitle: "Выполненые заказы",
+        ordersTitle: "Заказы",
+        ordersEmpty: "Здесь пусто(",
+        
+        orderInfoCheck: "Пожалуйста, проверьте информацию.",
+        orderInfoCheckEdit: "Редактировать",
+        orderInfoCheckOrder: "Оформить заказ",
+        orderFormName: "Имя",
+        orderFormPhone: "Телефон",
+        orderFormAddress: "Адрес",
+        orderFormFloor: "Этаж",
         orderFormNotes: "Примечания",
-        orderFormDeliveryTime: "Когда привезти:",
+        orderFormDeliveryTime: "Когда привезти",
         orderFormRegister: "Зарегистрировать заказ",
+        orderAddress: "Адрес доставки:",
+        orderCancel: "Отменить заказ",
+        orderDelete: "Удалить заказ",
+        orderViewInfo: "Информация",
+        orderStatus: "Статус",
+        orderStatusToBeShipped: "Ожидается отправка",
+        orderStatusShipped: "Отправлен",
+        orderStatusCanceled: "Отменён",
 
         productsTitle: "Товары",
         productPrice: "Цена: {{price}}",

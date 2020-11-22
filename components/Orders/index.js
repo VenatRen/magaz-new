@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useLayoutEffect} from "react";
 import { LayoutAnimation, Platform, UIManager,FlatList, View, StyleSheet, TextInput, Text, Dimensions, Button, TouchableOpacity, ScrollView } from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import { stateContext, dispatchContext } from "../../contexts";
@@ -6,6 +6,7 @@ import { stateContext, dispatchContext } from "../../contexts";
 import Header from "./../Header/index";
 import OurText from "../OurText";
 import {useTranslation} from "react-i18next";
+import { HeaderTitle, HeaderCartButton, HeaderBackButton } from "../Header";
 
 
 const TextField = (props)=>{
@@ -124,7 +125,18 @@ const DATA =[
     
 ];
     
+const [gradStart, gradEnd] = ["#931DC4", "#F33BC8"];
 
+useLayoutEffect( () => {
+    navigation.setOptions({
+        headerLeft: (props)=><HeaderBackButton navigation={navigation}/>,
+        headerCenter: (props)=><HeaderTitle navigation ={navigation} title={"completedOrdersTitle"}/>,
+        headerRight: (props)=><HeaderCartButton navigation={navigation}/>,
+        headerStyle: {
+            backgroundColor: gradStart,
+        },
+    });
+}, [navigation]);
 
 
 
@@ -152,11 +164,6 @@ const Item = ({title, style, index}) => (
 
 
    
-
-    // const renderItem = ({ item }) => (
-    //     <Item title={item.title} />
-    // );
-    
     
 
 
@@ -164,7 +171,6 @@ const Item = ({title, style, index}) => (
     return (
         <>
         <LinearGradient style={styles.grad} locations={[0, 1.0]} colors={["#931DC4", "#F33BC8"]}/>
-                <Header {...props} title={t("completedOrdersTitle")} showCart={true}/>
         <View style={styles.main}>
             <View style={styles.header}>
                 {/* <OurText style={styles.textDelivery}>Выполненые заказы</OurText>

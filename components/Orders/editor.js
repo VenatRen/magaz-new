@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react";
+import React, {useState, useContext, useLayoutEffect} from "react";
 import { LayoutAnimation, Platform, UIManager, View, StyleSheet, TextInput, Text, Dimensions, Button, TouchableOpacity, ScrollView } from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import { stateContext, dispatchContext } from "../../contexts";
@@ -6,6 +6,7 @@ import { stateContext, dispatchContext } from "../../contexts";
 import Header from "./../Header/index";
 import OurText from "../OurText";
 import {useTranslation} from "react-i18next";
+import { HeaderTitle, HeaderCartButton, HeaderBackButton } from "../Header";
 
 if (
     Platform.OS === 'android' &&
@@ -147,10 +148,22 @@ const Editor = (props) =>
     const { navigation } = props;
     const {t} = useTranslation()
 
+    const [gradStart, gradEnd] = ["#931DC4", "#F33BC8"];
+
+    useLayoutEffect( () => {
+        navigation.setOptions({
+            headerLeft: (props)=><HeaderBackButton navigation={navigation}/>,
+            headerCenter: (props)=><HeaderTitle navigation={navigation} title={"editor"}/>,
+            headerRight: (props)=><HeaderCartButton navigation={navigation}/>,
+            headerStyle: {
+                backgroundColor: gradStart,
+            },
+        });
+    }, [navigation]);
+
     return (
         <>
         <LinearGradient style={styles.grad} locations={[0, 1.0]} colors={["#931DC4", "#F33BC8"]}/>
-        <Header {...props} title={t("editor")} showCart={true}/>
         <View style={styles.main}>
             <View style={styles.header}>
                 {/* <OurText style={styles.textDelivery}>Редактор заказов</OurText>

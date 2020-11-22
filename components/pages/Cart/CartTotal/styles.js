@@ -1,15 +1,19 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
     container: {
         alignSelf: "flex-end",
-        width: 100,
-        borderTopWidth: 1,
+        width: Dimensions.get("window").width / 2,
+        borderTopWidth: .5,
         borderColor: "#FFF",
         marginTop: 2,
     },
     text: {
+        fontSize: 16,
+        textTransform: "uppercase",
         color: "#FFF",
+        textAlign: "right",
+        paddingRight: 4,
     }
 });
 

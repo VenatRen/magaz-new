@@ -5,9 +5,9 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 import CategoryList from "./components/pages/CategoryList";
 import Cart from "./components/pages/Cart";
 import ProductList from "./components/pages/ProductsList";
-import DeliveryDetails from "./components/Delivery";
-import Editor from "./components/Orders/editor";
-import Orders from "./components/Orders";
+import DeliveryDetails from "./components/pages/DeliveryDetails";
+import DeliveryDetailsCheck from "./components/pages/DeliveryDetailsCheck";
+import Orders from "./components/pages/Orders";
 
 const { Navigator, Screen } = createNativeStackNavigator();
 
@@ -43,8 +43,8 @@ const AppStackNavigator = () => {
                 name="DeliveryDetails"
                 component={DeliveryDetails}/>
             <Screen 
-                name="Editor"
-                component={Editor}/>
+                name="DeliveryDetailsCheck"
+                component={DeliveryDetailsCheck}/>
             <Screen 
                 name="Orders"
                 component={Orders}/>

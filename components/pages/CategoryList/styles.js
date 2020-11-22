@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
     view: {
@@ -6,12 +6,12 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     background: {
-        position: 'absolute',
+        position: "absolute",
         left: 0,
         right: 0,
         top: 0,
         bottom: 0,
-        minHeight: Dimensions.get("window").height,
+        minHeight: "100%",
     },
     categorylist: {
         flexDirection:"row",

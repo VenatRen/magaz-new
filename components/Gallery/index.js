@@ -30,6 +30,7 @@ const {data} = props;
         data={data}
         renderItem={renderGalleryImg}
         keyExtractor={(item) => String(data.indexOf(item))}
+        showsHorizontalScrollIndicator={false}
     />
     );
 };

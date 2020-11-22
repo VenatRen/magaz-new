@@ -1,112 +1,63 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
+    mainContainer: {
         flexDirection: "column",
+        marginHorizontal: 8,
+        marginBottom: 12,
+    },
+
+    titleContainer: {
+        alignItems: "center",
         justifyContent: "center",
-        paddingVertical: 30,
-        marginHorizontal: 5,
-        marginBottom:10,
-        
+        paddingVertical: 20,
     },
     title: {
+        color: "#fff",
         fontSize: 26,
-        color: "#fff",
         textAlign: "center",
-        marginHorizontal: 30,
     },
-    picture: {
+
+    infoContainer: {
+
+    },
+    infoTopContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    attributesContainer: {
+
+    },
+    infoMiddleContainer: {
+        marginVertical: 8,
+    },
+    infoBottomContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    infoPrice: {
         width: 110,
-        height: 110,
-        borderRadius: 36,
-        backgroundColor: "#fff",
-        borderWidth: 1,
-        borderColor: "#707070",
-    },
-    right:
-    {
-        flex: 1,
-        marginRight: 30,
-        marginTop: 15,
-        marginBottom: 20,
-    },
-    left:
-    {
-        flex: 1,
-        marginBottom: 20,
-        marginLeft: 0,
-        marginHorizontal: 0,
-    },
-    picture_gallery: {
-        width: 60,
-        height: 50,
-    },
-    modal_picture:{
-        alignItems: 'center',
-        justifyContent: "center",
-    },
-    modal_picture_gallery: {
-        width: 240.5,
-        height: 240.5,
-        borderRadius: 36,
-        borderWidth: 1,
-    },
-    viewPager: {
-        flex:1,
-    },
-    card:
-    {
-        minWidth: Dimensions.get("window").width,
-        maxHeight: 400,
-        flexDirection: "row",
-        justifyContent: 'space-around',
-    },
-    bottom:
-    {
-        minWidth: Dimensions.get("window").width,
-        maxHeight: 400,
-        marginTop: 15,
-        flexDirection: "row",
-        justifyContent: 'space-around',
-    },
-    price:
-    {
+        color: "#fff",
         fontSize: 16,
-        color: "#fff",
-        marginLeft: 20,
-    },
-    picker:
-    {
-        width: 180,
-        color: "#fff",
-    },
-    button: {
-        paddingHorizontal: 30,
-        paddingVertical: 5,
-        borderRadius: 15,
         textAlign: "center",
-        justifyContent: 'center',
-        backgroundColor: '#ffffff',
-        marginHorizontal: 70,
     },
-    textButton: {
-        paddingHorizontal: 16,
+    buyButton: {
+        paddingHorizontal: 80,
+    },
+    buyButtonText: {
         color: "#078998",
     },
-    modalButton: {
-        color: "#078998",
-        textAlign: "center",
-        justifyContent: 'center',
-        paddingHorizontal: 30,
-        paddingVertical: 5,
-        borderRadius: 15,
-        marginHorizontal: 70,
-        backgroundColor: '#ffffff',
+    descriptionContainer: {
+        paddingTop: 8,
+        paddingHorizontal: 8,
+        maxHeight: 96,
+        overflow: "hidden",
     },
-    descriptionText:
-    {
+    descriptionText: {
         color: "#ffffff",
+        fontSize: 18,
     }
 });
 

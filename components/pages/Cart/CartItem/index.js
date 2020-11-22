@@ -4,27 +4,45 @@ import { stateContext } from "../../../../contexts";
 import ItemCount from "./ItemCount";
 import styles from "./styles";
 import OurText from "../../../OurText";
+import OurImage from "../../../OurImage";
+import OurImageSlider from "../../../OurImageSlider";
 import { ListAnimation } from "../../../../Animations";
+import { STORE_ADDRESS } from "../../../../config";
 
 
-const totalHeight = Dimensions.get("window").height - 180;
 const itemWidth = Dimensions.get("window").width;
-const itemHeight = 60;
+const itemHeight = 156;
+const itemHeight2 = 164;
+const totalHeight = 440;
 
 
 /** Компонент товара в корзине */
 const CartItem = (props) => {
-    const { x, y, index, productId, name, price, count } = props;
+    const { x, y, index, productId, name, price, productQuantity, imageLink } = props;
+    const [isModalVisible, setModalVisible] = useState(false);
 
-    const [translateX, translateY, scale, opacity] = ListAnimation(x, y, totalHeight, itemHeight, itemWidth, index);
+    const toggleModal = () => {
+        setModalVisible(!isModalVisible);
+    };
+
+    const [translateX, translateY, scale, opacity] = ListAnimation(x, y, totalHeight, itemHeight2, itemWidth, index);
 
     return (
-        <Animated.View style={[styles.container, {height: itemHeight, width:itemWidth}, { opacity, transform: [{ translateX }, { scale }] }]}>
-            <OurText style={styles.item_name}>{name}</OurText>
-            <OurText style={styles.item_count} params={{count: count}}>cartPcs</OurText>
-            <View style={styles.right}>
-                <OurText style={styles.item_price}>{price * count}$</OurText>
-                <ItemCount productId={productId}/>
+        <Animated.View style={[styles.mainContainer, {height: itemHeight, width:itemWidth}, { opacity, transform: [{ translateX }, { scale }] }]}>
+            <View style={styles.topContainer}>
+                <OurText style={styles.itemName}>{name}</OurText>
+                <OurImage style={styles.productImage} url={`${STORE_ADDRESS}wp-content/uploads/${imageLink}`} onPress={toggleModal}/>
+                <OurImageSlider data={[`${STORE_ADDRESS}wp-content/uploads/${imageLink}`]} isModalVisible={isModalVisible} toggleModal={toggleModal} />
+            </View>
+            <View style={styles.bottomContainer}>
+                <OurText style={styles.itemCount} params={{quantity: productQuantity}}>cartPcs</OurText>
+                <View style={styles.itemCountController}>
+                    <OurText style={styles.itemPrice}>{price * productQuantity}$</OurText>
+                    <ItemCount productId={productId} quantity={productQuantity}/>
+                </View>
+            </View>
+            <View style={styles.borderContainer}>
+                <View style={styles.itemBorder}/>
             </View>
         </Animated.View>
     );

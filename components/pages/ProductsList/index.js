@@ -21,7 +21,7 @@ const LocallyAnimatedFlatList = ({data, refreshing, onRefresh}) => {
 
     const renderProductItem = ({item, index})=>{
         return (
-            <ProductsItem index={index} id={item.productId} data={item} x={x} y={y} galleryImg={item.galleryImages?.nodes[1]?.mediaDetails?.file}
+            <ProductsItem index={index} id={item.productId} data={item} x={x} y={y}
             imageUrl={item.image?.mediaDetails?.file} name={item.name} />
         )
     };

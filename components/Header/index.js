@@ -5,7 +5,7 @@ import { Badge } from 'native-base';
 import { stateContext, dispatchContext } from "../../contexts";
 import OurText from "../OurText";
 import styles from "./styles.js";
-import { faChevronLeft, faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faShoppingBasket, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
 import OurIconButton from "../OurIconButton";
 
 
@@ -88,6 +88,44 @@ export const HeaderCartButton = (props) => {
                     <OurText style={styles.priceText}>
                         {state.cartTotalPrice}$
                     </OurText>
+                </View>
+            </View>
+        </View>
+    );
+};
+
+export const HeaderOrdersButton = (props) => {
+    const { navigation } =  props;
+    const state = useContext(stateContext);
+
+    const goToOrders = (e) => {
+        navigation.navigate("Orders");
+    };
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.cartContainer}>
+                <View style={styles.iconCart}>
+                    <OurIconButton icon={faBoxOpen} size={50} onPress={goToOrders}>
+                        {
+                            state?.orders?.size ?
+                                <Badge success style={styles.badge}>
+                                    <OurText style={styles.badgeText}>
+                                        {
+                                            state?.orders?.size ?
+                                                (() => {
+                                                    if ( state.orders.size < 10 )
+                                                        return state.orders.size;
+                                                    else
+                                                        return "9+";
+                                                })()
+                                                : <></>
+                                        }
+                                    </OurText>
+                                </Badge>
+                                : <></>
+                        }
+                    </OurIconButton>
                 </View>
             </View>
         </View>

@@ -1,26 +1,92 @@
-import {
-    ADD_TO_CART,
-    CHANGE_BUTTON_STATUS, COMPUTE_TOTAL_PRICE, DELETE_FROM_CART, MINUS, PLUS,
-    SET_CART_ITEMS, SET_CATEGORIES_LIST,
-    SET_CATEGORY_PAGE_ID,
-    SET_DELIVERY_DETAILS_FIELD,
-    SET_FIELD, SET_PRODUCTS_LIST
-} from "./types";
 import { Alert, ToastAndroid } from "react-native";
-import { DeleteFromCart } from "./actions";
-import { addProductToCart, deleteProductFromCart } from "./db_handler";
+import { DeleteProductFromCart } from "./actions";
+
+import {
+    ACTION_TYPE_SET_PRODUCT_LIST,
+    ACTION_TYPE_SET_CATEGORY_LIST,
+    ACTION_TYPE_CART_SET_PRODUCTS,
+    ACTION_TYPE_CART_ADD_PRODUCT,
+    ACTION_TYPE_CART_DELETE_PRODUCT,
+    ACTION_TYPE_CART_CLEAR,
+    ACTION_TYPE_CART_DECREASE_QUANTITY,
+    ACTION_TYPE_CART_INCREASE_QUANTITY,
+    ACTION_TYPE_CART_CHANGE_QUANTITY,
+    ACTION_TYPE_CART_COMPUTE_TOTAL_PRICE,
+    ACTION_TYPE_ORDERS_SET_LIST,
+    ACTION_TYPE_ORDERS_ADD_TO_LIST,
+    ACTION_TYPE_DELIVERY_CHANGE_FIELD,
+    ACTION_TYPE_DELIVERY_CLEAR,
+    ACTION_TYPE_ORDER_CHANGE_STATUS,
+    ACTION_TYPE_ORDER_DELETE,
+    ACTION_TYPE_MODAL_SHOW,
+    ACTION_TYPE_MODAL_CLOSE,
+    ACTION_TYPE_MODAL_TOGGLE,
+} from "./types";
+import {
+    addProductToCartDB,
+    deleteProductFromCart,
+    clearCart,
+    addOrderToDB,
+    getDBOrders,
+    updateOrderStatus,
+    deleteOrderFromDB,
+} from "./db_handler";
 
 const showToastMessage = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
 };
 
-const isAllDeliveryDetailsSet = (state) => {
-    for ( let key in state.deliveryDetails) {
-
-        if (!state.deliveryDetails[key])
-            return false;
-    }
-    return true;
+export const initialState = {
+    modal: {
+        visible: false,
+        title: { text: "", params: {} },
+        text: { text: "", params: {} },
+        animationIn: "slideInRight",
+        animationOut: "slideOutLeft",
+        buttons: [],
+    },
+    cartItems: new Map(),
+    cartTotalPrice: 0,
+    orders: new Map(),
+    deliveryDetails: {
+        name: {
+            name: "name",
+            placeholder: "orderFormName",
+            value: "",
+            valid: false,
+        },
+        phone: {
+            name: "phone",
+            placeholder: "orderFormPhone",
+            value: "",
+            valid: false,
+        },
+        address: {
+            name: "address",
+            placeholder: "orderFormAddress",
+            value: "",
+            valid: false,
+        },
+        floor: {
+            name: "floor",
+            placeholder: "orderFormFloor",
+            value: "",
+            valid: true,
+        },
+        notes: {
+            name: "notes",
+            placeholder: "orderFormNotes",
+            value: "",
+            valid: true,
+        },
+        time: {
+            name: "time",
+            placeholder: "orderFormDeliveryTime",
+            value: "",
+            valid: false,
+        },
+    },
+    allDetailsAreValid: false,
 };
 
 /**
@@ -28,94 +94,16 @@ const isAllDeliveryDetailsSet = (state) => {
  * @param  {object} state - объект state
  * @param  {object} action - объект action
  */
-const reducer = (state, action) => {
+export const reducer = (state, action) => {
     /**
      * Проверяет тип действия
      */
-    switch (action.type)
-    {
-        case SET_CART_ITEMS: {
-            const newState = {...state};
-            
-            newState.cartItems = action.payload || [];
-
-            return newState;
-        }
-
-        case SET_FIELD: {
-            const newState = {...state};
-            newState[action.fieldName] = action.payload;
-
-            return newState;
-        }
-
-
-        case SET_DELIVERY_DETAILS_FIELD: {
-            const newState = {...state};
-            newState.deliveryDetails[action.fieldName] = action.payload;
-
-            return newState;
-        }
-
-        case CHANGE_BUTTON_STATUS: {
-            const newState = {...state};
-
-            if ( isAllDeliveryDetailsSet(newState) && !action.buttonEnabled )
-                action.setButtonEnabled(true);
-            else if ( !isAllDeliveryDetailsSet(newState) && action.buttonEnabled )
-                action.setButtonEnabled(false);
-
-            return newState;
-        }
-
-        /**
-         * Устанавливает id категории для текущей страницы
-         */
-        case SET_CATEGORY_PAGE_ID: {
-            const newState = {...state};
-            newState.currentCategory = action.payload;
-            return newState;
-        }
-        /**
-         * Заносит товар и его данные в state
-         */
-        case ADD_TO_CART: {
-            const t = action.t; // Translate
-            const newState = {...state};
-
-            if ( state.cartItems.has(action.payload.productId) ) {
-                const item = state.cartItems.get(action.payload.productId);
-                item.count += action.payload.count;
-            } else {
-                state.cartItems.set(action.payload.productId, action.payload);
-            }
-
-            // Расчитываем итоговую цену
-            newState.cartTotalPrice = 0;
-            if ( newState.cartItems.size ) {
-                newState.cartItems.forEach( (value) => {
-                    newState.cartTotalPrice += value.price * value.count;
-                });
-            }
-
-            
-            addProductToCart(action.payload.name,
-                action.payload.productId,
-                action.payload.imageLink,
-                action.payload.count,
-                action.payload.price,
-                action.payload.selectedVariants,
-                action.payload.stockQuantity);
-
-            showToastMessage(t("productAddedMessage", {product: action.payload.name}));
-
-            return newState;
-        }
+    switch (action.type) {
 
         /**
          * Устанавливает список продуктов для текущей страницы
          */
-        case SET_PRODUCTS_LIST: {
+        case ACTION_TYPE_SET_PRODUCT_LIST: {
             const newState = {...state};
 
             newState.products = {...newState.products, [action.id]: action.payload.products.nodes};
@@ -126,7 +114,7 @@ const reducer = (state, action) => {
         /**
          * Устанавливает список категорий для текущей страницы
          */
-        case SET_CATEGORIES_LIST: {
+        case ACTION_TYPE_SET_CATEGORY_LIST: {
             const newState = {...state};
 
             newState.categories = action.payload;
@@ -135,40 +123,72 @@ const reducer = (state, action) => {
         }
 
         /**
-         * Расчитывает итог для корзины
+         * Загружает данные корзины из базы данных в state
          */
-        // Не рекомендуется к использованию.
-        case COMPUTE_TOTAL_PRICE: {
+        case ACTION_TYPE_CART_SET_PRODUCTS: {
             const newState = {...state};
-            newState.cartTotalPrice = 0;
-            
 
+            newState.cartItems = action.payload || [];
+
+            // Расчитываем итоговую цену
+            newState.cartTotalPrice = 0;
             if ( newState.cartItems.size ) {
                 newState.cartItems.forEach( (value) => {
-                    newState.cartTotalPrice += value.price * value.count;
+                    newState.cartTotalPrice += value.price * value.productQuantity;
                 });
-            } else {
-                newState.cartTotalPrice = 0;
-                return newState;
             }
-            
+
+            return newState;
+        }
+
+        /**
+         * Заносит товар и его данные в state
+         */
+        case ACTION_TYPE_CART_ADD_PRODUCT: {
+            const t = action.t; // Translate
+            const newState = {...state};
+
+            if ( state.cartItems.has(action.payload.productId) ) {
+                const item = state.cartItems.get(action.payload.productId);
+                item.productQuantity += action.payload.productQuantity;
+            } else {
+                state.cartItems.set(action.payload.productId, action.payload);
+            }
+
+            // Расчитываем итоговую цену
+            newState.cartTotalPrice = 0;
+            if ( newState.cartItems.size ) {
+                newState.cartItems.forEach( (value) => {
+                    newState.cartTotalPrice += value.price * value.productQuantity;
+                });
+            }
+
+            addProductToCartDB(action.payload.name,
+                action.payload.productId,
+                action.payload.imageLink,
+                action.payload.productQuantity,
+                action.payload.price,
+                action.payload.selectedVariants,
+                action.payload.stockQuantity);
+
+            showToastMessage(t("productAddedMessage", {product: action.payload.name}));
+
             return newState;
         }
 
         /**
          * Удаляет товар из корзины
          */
-        case DELETE_FROM_CART: {
+        case ACTION_TYPE_CART_DELETE_PRODUCT: {
             const newState = {...state};
 
-            
             newState.cartItems.delete(action.payload);
 
             // Расчитываем итоговую цену
             newState.cartTotalPrice = 0;
             if ( newState.cartItems.size ) {
                 newState.cartItems.forEach( (value) => {
-                    newState.cartTotalPrice += value.price * value.count;
+                    newState.cartTotalPrice += value.price * value.productQuantity;
                 });
             }
 
@@ -176,44 +196,54 @@ const reducer = (state, action) => {
             return newState;
         }
 
+        case ACTION_TYPE_CART_CLEAR: {
+            const newState = {...state};
+
+            newState.cartItems = new Map();
+            newState.cartTotalPrice = 0;
+
+            clearCart();
+
+            return newState;
+        }
+
         /**
          * Минусует 1 товар из корзины
          */
-        case MINUS: {
+        case ACTION_TYPE_CART_DECREASE_QUANTITY: {
             const t = action.t;
             const newState = {...state};
 
             if ( state.cartItems.has(action.payload) ) {
                 const item = state.cartItems.get(action.payload);
 
-                if ( item.count === 1 ) {
+                if ( item.productQuantity === 1 ) {
                     Alert.alert(t("cartDeleteTitle"), t("cartDeleteMessage"), [
                         {
                             text: t("cancel"),
-                            onPress: () => {/*action.dispatch({type: "plus", payload: action.payload})*/},
                             style: "cancel"
                         },
                         {
                             text: t("ok"),
                             onPress: () => {
-                                action.dispatch(DeleteFromCart(action.payload));
+                                action.dispatch(DeleteProductFromCart(action.payload));
                             }
                         }
                     ],
                     {cancelable: false});
 
                 } else {
-                    item.count = Math.clamp(item.count - 1, 0, item.stockQuantity || 99);
+                    item.productQuantity = Math.clamp(item.productQuantity - 1, 0, item.stockQuantity || 99);
 
                     // Расчитываем итоговую цену
                     newState.cartTotalPrice = 0;
                     if ( newState.cartItems.size ) {
                         newState.cartItems.forEach( (value) => {
-                            newState.cartTotalPrice += value.price * value.count;
+                            newState.cartTotalPrice += value.price * value.productQuantity;
                         });
                     }
 
-                    addProductToCart(item.name, item.productId, item.imageLink, item.count, item.price, item.selectedVariants, item.stockQuantity);
+                    addProductToCartDB(item.name, item.productId, item.imageLink, item.productQuantity, item.price, item.selectedVariants, item.stockQuantity);
                 }
             }
             else
@@ -225,22 +255,22 @@ const reducer = (state, action) => {
         /**
          * Плюсует 1 товар в корзину
          */
-        case PLUS: {
+        case ACTION_TYPE_CART_INCREASE_QUANTITY: {
             const newState = {...state};
 
             if ( newState.cartItems.has(action.payload) ) {
                 const item = newState.cartItems.get(action.payload);
-                item.count = Math.clamp(item.count + 1, 1, item.stockQuantity || 99);
+                item.productQuantity = Math.clamp(item.productQuantity + 1, 1, item.stockQuantity || 99);
 
                 // Расчитываем итоговую цену
                 newState.cartTotalPrice = 0;
                 if ( newState.cartItems.size ) {
                     newState.cartItems.forEach( (value) => {
-                        newState.cartTotalPrice += value.price * value.count;
+                        newState.cartTotalPrice += value.price * value.productQuantity;
                     });
                 }
 
-                addProductToCart(item.name, item.productId, item.imageLink, item.count, item.price, item.selectedVariants, item.stockQuantity);
+                addProductToCartDB(item.name, item.productId, item.imageLink, item.productQuantity, item.price, item.selectedVariants, item.stockQuantity);
             }
             else 
                 return state;
@@ -248,9 +278,188 @@ const reducer = (state, action) => {
             return newState;
         }
 
+        /**
+         * Расчитывает итог для корзины
+         */
+        // Не рекомендуется к использованию.
+        case ACTION_TYPE_CART_COMPUTE_TOTAL_PRICE: {
+            const newState = {...state};
+            newState.cartTotalPrice = 0;
+            
+
+            if ( newState.cartItems.size ) {
+                newState.cartItems.forEach( (value) => {
+                    newState.cartTotalPrice += value.price * value.productQuantity;
+                });
+            } else {
+                newState.cartTotalPrice = 0;
+                return newState;
+            }
+            
+            return newState;
+        }
+
+        /**
+         * Записывает заказы в state
+         */
+        case ACTION_TYPE_ORDERS_SET_LIST: {
+            const newState = {...state};
+
+            newState.orders = action.payload;
+
+            return newState;
+        }
+
+        /**
+         * Заносит заказ в state и в бд
+         */
+        case ACTION_TYPE_ORDERS_ADD_TO_LIST: {
+            const newState = {...state};
+            const { payload } = action;
+            newState.orders.set(payload.uuid, payload);
+
+            addOrderToDB(payload.uuid,
+                payload.deliveryDetails.name,
+                payload.deliveryDetails.phone,
+                payload.deliveryDetails.address,
+                payload.deliveryDetails.floor,
+                payload.deliveryDetails.notes,
+                payload.deliveryDetails.time, payload.status, payload.products, payload.totalPrice);
+
+            return newState;
+        }
+
+        /**
+         * Изменяет поле в deliveryDetails
+         */
+        case ACTION_TYPE_DELIVERY_CHANGE_FIELD: {
+            const newState = {...state};
+            const { fieldName } = action;
+            let valid = true;
+
+            newState.deliveryDetails[fieldName].value = action.payload;
+            newState.deliveryDetails[fieldName].valid = true;
+
+            for ( const [fn, data] of Object.entries(newState.deliveryDetails) ) {
+                if ( !data.valid )
+                    valid = true;
+            }
+            newState.allDetailsAreValid = valid;
+
+            return newState;
+        }
+
+        /**
+         * Очищает deliveryDetails
+         */
+        case ACTION_TYPE_DELIVERY_CLEAR: {
+            const newState = {...state};
+            newState.deliveryDetails = {
+                name: {
+                    name: "name",
+                    placeholder: "orderFormName",
+                    value: "",
+                    valid: false,
+                },
+                phone: {
+                    name: "phone",
+                    placeholder: "orderFormPhone",
+                    value: "",
+                    valid: false,
+                },
+                address: {
+                    name: "address",
+                    placeholder: "orderFormAddress",
+                    value: "",
+                    valid: false,
+                },
+                floor: {
+                    name: "floor",
+                    placeholder: "orderFormFloor",
+                    value: "",
+                    valid: true,
+                },
+                notes: {
+                    name: "notes",
+                    placeholder: "orderFormNotes",
+                    value: "",
+                    valid: true,
+                },
+                time: {
+                    name: "time",
+                    placeholder: "orderFormDeliveryTime",
+                    value: "",
+                    valid: false,
+                },
+            };
+            newState.allDetailsAreValid = false;
+
+            return newState;
+        }
+
+        /**
+         * Изменяет статус заказа
+         */
+        case ACTION_TYPE_ORDER_CHANGE_STATUS: {
+            const newState = {...state};
+
+            const order = newState.orders.get(action.id);
+            order.status = action.payload;
+            newState.orders.set(action.id, order);
+
+            updateOrderStatus(action.id, action.payload);
+
+            return newState;
+        }
+
+        /**
+         * Удаляет заказ
+         */
+        case ACTION_TYPE_ORDER_DELETE: {
+            const newState = {...state};
+
+            newState.orders.delete(action.payload);
+
+            deleteOrderFromDB(action.payload);
+
+            return newState;
+        }
+
+        /**
+         * Открывает модальное окно
+         */
+        case ACTION_TYPE_MODAL_SHOW: {
+            const newState = {...state};
+            const { payload } = action;
+            if ( payload )
+                newState.modal = { ...newState.modal, ...payload }
+            newState.modal.visible = true;
+
+            return newState;
+        }
+        /**
+         * Закрывает модальное окно
+         */
+        case ACTION_TYPE_MODAL_CLOSE: {
+            const newState = {...state};
+            newState.modal.visible = false;
+
+            return newState;
+        }
+        /**
+         * Переключает состояние модального окна
+         */
+        case ACTION_TYPE_MODAL_TOGGLE: {
+            const newState = {...state};
+            const { payload } = action;
+            if ( payload )
+                newState.modal = { ...newState.modal, ...payload }
+            newState.modal.visible = !newState.modal.visible;
+
+            return newState;
+        }
+
         default:
             return state;
     }
 };
-
-export default reducer;

@@ -13,7 +13,7 @@ const OurTextButton = (props) => {
             activeOpacity={ disabled ? 1 : .2 }
             style={disabled ? [styles.buttonDisabled, style] : [styles.buttonEnabled, style] }
             onPress={(e) => {
-                if ( !disabled )
+                if ( !disabled && onPress )
                     onPress(e);
             }}>
 

@@ -1,33 +1,60 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Dimensions } from "react-native";
 
 const styles = StyleSheet.create({
-    container: {
+    mainContainer: {
+        marginTop: 12,
+    },
+    topContainer: {
         flexDirection: "row",
-        justifyContent: "center",
         alignItems: "center",
+        justifyContent: "space-between",
+        paddingLeft: 16,
+        paddingBottom: 4,
     },
-    item_name: {
+    itemName: {
         color: "#FFF",
-        fontSize: 16,
-        width: 150,
+        fontSize: 18,
+        maxWidth: 240,
     },
-    item_price: {
+    productImage: {
+        width: 96,
+        height: 96,
+        borderRadius: 8,
+        marginRight: 6,
+    },
+    bottomContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
+    itemPrice: {
         color: "#FFF",
-        fontSize: 16,
+        fontSize: 17,
         marginHorizontal: 0,
+        textAlign: "right",
     },
-    item_count: {
+    itemCount: {
         color: "#FFF",
-        fontSize: 16,
-        marginHorizontal: 16,
+        fontSize: 18,
+        marginHorizontal: 32,
         flexGrow: 0,
-        width: 50,
     },
-    right: {
+    itemCountController: {
         width: 120,
         flexDirection: "column",
         alignItems: "flex-end",
-    }
+        marginRight: 6,
+    },
+    borderContainer: {
+        alignItems: "center",
+        paddingTop: 7,
+        overflow: "hidden",
+    },
+    itemBorder: {
+        width: 340,
+        borderWidth: .5,
+        borderColor: "#fff5",
+    },
 });
 
 export default styles;

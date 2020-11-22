@@ -5,10 +5,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import CartItem from "./CartItem";
 import CartTotal from "./CartTotal";
 import styles from "./styles";
-import { HeaderBackButton, HeaderTitle } from "../../Header/index";
+import { HeaderBackButton, HeaderTitle, HeaderOrdersButton } from "../../Header/index";
+import OurText from "../../OurText";
 import OurTextButton from "../../OurTextButton";
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const LocallyAnimatedFlatList = ({data}) => {
     const [x, setX] = useState(new Animated.Value(0));
@@ -19,12 +18,12 @@ const LocallyAnimatedFlatList = ({data}) => {
 
     const renderItemsBlock = ({item, index}) => {
         return (
-            <CartItem x={x} y={y} index={index} productId={item.productId} name={item.name} price={item.price} count={item.count}/>
+            <CartItem x={x} y={y} index={index} productId={item.productId} name={item.name} price={item.price} productQuantity={item.productQuantity} imageLink={item.imageLink}/>
         );
     };
 
     return (
-        <AnimatedFlatList
+        <Animated.FlatList
             contentContainerStyle={styles.cartList}
             data={data}
             renderItem={renderItemsBlock}
@@ -45,16 +44,16 @@ const Cart = (props) => {
 
     useLayoutEffect( () => {
         navigation.setOptions({
-            headerLeft: (props)=><HeaderBackButton navigation={navigation}/>,
-            headerCenter: (props)=><HeaderTitle navigation={navigation} title={"cartTitle"}/>,
-            headerRight: (props)=>{},
+            headerLeft: (props) => <HeaderBackButton navigation={navigation}/>,
+            headerCenter: (props) => <HeaderTitle navigation={navigation} title={"cartTitle"}/>,
+            headerRight: (props) => <HeaderOrdersButton navigation={navigation}/>,
             headerStyle: {
                 backgroundColor: gradStart,
             },
         });
     }, [navigation]);
 
-    const toDeliveryDetails = (e)=> {
+    const toDeliveryDetails = (e) => {
         if ( state.cartItems?.size )
             navigation.navigate("DeliveryDetails");
     };
@@ -67,8 +66,14 @@ const Cart = (props) => {
                 colors={[gradStart, gradEnd]}/>
 
                 <View style={styles.items}>
+                    {
+                        state.cartItems?.size === 0 ?
+                            <OurText style={styles.emptyText}
+                                translate={true}>cartEmpty</OurText>
+                        : <></>
+                    }
                     <MemoedLocallyAnimatedFlatList data={Array.from(state.cartItems.values())}/>
-                    <CartTotal />
+                    <CartTotal total={state.cartTotalPrice} />
                     <OurTextButton
                         translate={true}
                         disabled={!state.cartItems.size}

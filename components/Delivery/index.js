@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useContext, useEffect, useLayoutEffect} from "react";
 import {
     LayoutAnimation,
     Platform,
@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { stateContext, dispatchContext } from "../../contexts";
-import Header from "../Header";
+import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "../Header";
 import OurText from "../OurText";
 import {useTranslation} from "react-i18next";
 
@@ -25,6 +25,7 @@ import {
     ChangeButtonStatus
 } from "../../actions";
 import Editor from "../Orders/editor";
+import { NavigationContainer } from "@react-navigation/native";
 
 if (
     Platform.OS === 'android' &&
@@ -126,6 +127,12 @@ const styles = StyleSheet.create({
     },
 });
 
+
+
+
+
+
+
 /** Компонент текстового поля */
 const TextField = (props)=>{
 
@@ -135,13 +142,6 @@ const TextField = (props)=>{
     const {fieldName, buttonEnabled, setButtonEnabled} = props;
 
     const [text, setText] = useState("");
-   
-
-    // useEffect(()=>{
-        
-    //         dispatch(SetDeliveryDetailsField(fieldName, ));
-    // }, [] )
-
 
     return (
                 <View style={styles.container}>
@@ -183,13 +183,27 @@ const DeliveryDetails = (props) =>
     
     const {t} = useTranslation()
     const dispatch = useContext(dispatchContext);
+
+    const [gradStart, gradEnd] = ["#1DC44F", "#3BF3AE"];
+
+    useLayoutEffect( () => {
+        navigation.setOptions({
+            headerLeft: (props)=><HeaderBackButton navigation={navigation}/>,
+            headerCenter: (props)=><HeaderTitle navigation={navigation} title={"deliveryDetailsTitle"} />,
+            headerRight: (props)=><HeaderCartButton navigation={navigation}/>,
+            headerStyle: {
+                backgroundColor: gradStart,
+            },
+        });
+    }, [navigation]);
+
+
     useEffect(() => {
         dispatch(ChangeButtonStatus(buttonEnabled, setButtonEnabled ));
     });
     return (
         <>
         <LinearGradient style={styles.grad} locations={[0, 1.0]} colors={["#1DC44F", "#3BF3AE"]}/>
-        <Header {...props} title={t('delivery')} showCart={true}/>
         <View style={styles.main}>
             <View style={styles.header}>
                 {/* <OurText style={styles.textDelivery}>Детали доставки</OurText> */}

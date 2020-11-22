@@ -1,42 +1,31 @@
-
 import { enableScreens } from 'react-native-screens';
 
 enableScreens();
 
 import React, { useReducer, useEffect } from "react";
-import { stateContext, dispatchContext } from "./contexts";
 import { AppRegistry } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import AppStackNavigator from "./navigation";
-import { name } from "./app.json";
+import { expo } from "./app.json";
 import * as hehe from './utils';
-import { createDBTables, getCart } from "./db_handler";
-import reducer from "./reducer";
+import { reducer, initialState } from "./reducer";
+import { stateContext, dispatchContext } from "./contexts";
+import { createDBTables, getCartFromDB, getOrdersFromDB } from "./db_handler";
+import { SetCartProducts, SetOrderList } from "./actions";
+import OurModal from "./components/OurModal";
 import "./i18n";
-import { ComputeTotalPrice, SetCartItems } from "./actions";
 
 /**Контейнер приложения */
-const AppContainer = ()=>{
+const AppContainer = () => {
 	return (
-		<NavigationContainer>
-			<AppStackNavigator/>
-		</NavigationContainer>
-		);
+		<>
+			<NavigationContainer>
+				<AppStackNavigator/>
+			</NavigationContainer>
+			<OurModal/>
+		</>
+	);	
 }
-
-const initialState = {
-	cartItems: new Map(),
-	cartTotalPrice: 0,
-	currentCategory: -1,
-	deliveryDetails: {
-		name:"",
-		phone:"",
-		address:"",
-		floor:"",
-		notes:"",
-		when:""
-	},
-};
 
 const App = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -47,13 +36,47 @@ const App = () => {
 		/*
         * Подгружаем данные корзины из базы данных
         * */
-		getCart((tr, result) => {
+		getCartFromDB((tr, result) => {
 			const data = new Map();
 			result.rows["_array"].map( (v, i) => {
 				data.set(v.productId, v);
 			});
-			dispatch(SetCartItems(data));
-			dispatch(ComputeTotalPrice());
+			dispatch(SetCartProducts(data));
+		},
+		(err) => {
+			console.log("WELL SHIT", err)
+		});
+
+		/*
+        * Подгружаем данные заказов из базы данных
+        * */
+		getOrdersFromDB((tr, result) => {
+			const data = new Map();
+			result.rows["_array"].map( (v, i) => {
+				let products = new Map();
+				try {
+					const json = JSON.parse(v.products);
+					products = new Map(Object.entries(json));
+				} catch(err) { console.log("WTF", err) }
+
+				const order = {
+					id: v.id,
+					uuid: v.uuid,
+					deliveryDetails: {
+						name: v.customerName,
+						phone: v.customerPhone,
+						address: v.customerAddress,
+						floor: v.customerFloor,
+						notes: v.orderNotes,
+						time: v.orderDeliveryTime,
+					},
+					products: products,
+					status: v.status,
+					totalPrice: v.totalPrice,
+				};
+				data.set(order.uuid, order);
+			});
+			dispatch(SetOrderList(data));
 		},
 		(err) => {
 			console.log("WELL SHIT", err)
@@ -68,6 +91,6 @@ const App = () => {
 		</stateContext.Provider>
 	);
 };
-AppRegistry.registerComponent(name, () => App);
+AppRegistry.registerComponent(expo.name, () => App);
 
 export default App;
