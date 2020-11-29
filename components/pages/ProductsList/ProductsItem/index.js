@@ -31,6 +31,7 @@ const ProductsItem = (props) => {
         return `${STORE_ADDRESS}wp-content/uploads/${obj?.mediaDetails?.file}`
     }))];
     const [isModalVisible, setModalVisible] = useState(false);
+    const [page, setPage] = useState(0);
 
     const toggleModal = () => {
         setModalVisible(!isModalVisible);
@@ -57,6 +58,10 @@ const ProductsItem = (props) => {
         // Добавляем в корзину
         dispatch(AddProductToCart(payload, dispatch, t));
     };
+    const onImagePress = (e, index) => {
+        setPage(index);
+        toggleModal();
+    };
 
     const [translateX, translateY, scale, opacity] = ListAnimation(x, y, totalHeight, itemHeight2, itemWidth, index);
 
@@ -79,10 +84,10 @@ const ProductsItem = (props) => {
                                 <></>
                         }
                     </View>
-                    <OurImageSlider data={images} isModalVisible={isModalVisible} toggleModal={toggleModal} />
+                    <OurImageSlider data={images} isModalVisible={isModalVisible} toggleModal={toggleModal} page={page}/>
                 </View>
                 <View style={styles.infoMiddleContainer}>
-                    <GalleryImg data={data?.galleryImages?.nodes}/>
+                    <GalleryImg data={data?.galleryImages?.nodes} onPress={onImagePress}/>
                 </View>
                 <View style={styles.infoBottomContainer}>
                     <OurText style={styles.infoPrice}

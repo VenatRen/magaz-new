@@ -5,13 +5,18 @@ import OurImage from "~/components/OurImage";
 import styles from "./styles";
 
 // Элемент галереи
-const renderGalleryImg = ({item}) => {
+const RenderGalleryImg = (props) => {
+    const {item, onPress, index} = props;
+    
     return (
             <View style={styles.left_bottom}>
                 <OurImage
                     style={styles.picture_bottom}
                     url={`${STORE_ADDRESS}wp-content/uploads/${item.mediaDetails?.file}`}
-                    disabled={true}
+                    onPress={(e) => {
+                        if ( onPress )
+                            onPress(e, index);
+                    }}
                     />
             </View>
     );
@@ -19,14 +24,14 @@ const renderGalleryImg = ({item}) => {
 
 // Галерея
 const GalleryImg = (props) => {
-    const { data } = props;
+    const { data, onPress } = props;
 
     return (
         <FlatList 
             contentContainerStyle={styles.list}
             horizontal={true}
             data={data}
-            renderItem={renderGalleryImg}
+            renderItem={({item})=><RenderGalleryImg item={item} onPress={onPress} index={data.indexOf(item)}/>}
             keyExtractor={(item) => String(data.indexOf(item))}
             showsHorizontalScrollIndicator={false}
         />

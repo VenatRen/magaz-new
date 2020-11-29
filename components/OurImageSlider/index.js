@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StatusBar } from "react-native";
 import ViewPager from '@react-native-community/viewpager';
 import Modal from 'react-native-modal';
@@ -10,7 +10,7 @@ import styles from "./styles";
 const BACKDROP_OPACITY = .7;
 
 const OurImageSlider = (props) => {
-    const { data, isModalVisible, toggleModal } = props;
+    const { data, isModalVisible, toggleModal, page } = props;
 
     useEffect( () => {
         if ( isModalVisible )
@@ -21,7 +21,7 @@ const OurImageSlider = (props) => {
 
     return (
         <Modal onBackdropPress={toggleModal} onBackButtonPress={toggleModal} isVisible={isModalVisible} backdropOpacity={BACKDROP_OPACITY} backdropTransitionOutTiming={0}>      
-            <ViewPager style={styles.viewPager} showPageIndicator={true}>
+            <ViewPager style={styles.viewPager} showPageIndicator={true} initialPage={page}>
                 {
                     data.map((url, i) =>
                         <View 
