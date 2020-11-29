@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TouchableOpacity } from "react-native";
-import styles from "./styles";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import styles from "./styles";
 
 const LONG_PRESS_DELAY = 150;
 

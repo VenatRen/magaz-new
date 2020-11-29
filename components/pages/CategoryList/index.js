@@ -1,21 +1,18 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useContext, useLayoutEffect } from "react";
 import { FlatList } from "react-native";
-import { stateContext, dispatchContext } from "../../../contexts";
-import OurActivityIndicator from "../../OurActivityIndicator";
+import { stateContext, dispatchContext } from "~/contexts";
+import { SetCategoryList, ShowModal } from "~/actions";
+import { getCategoryListQuery } from "~/queries";
+import { addCategoryToDB, getCategoryListFromDB } from "~/db_handler";
+import useFetch from "~/network_handler";
+import { STORE_ADDRESS } from "~/config";
+import { expo } from "~/app.json";
+import OurActivityIndicator from "~/components/OurActivityIndicator";
 import CategoryItem from "./CategoryItem";
 import styles from "./styles";
-import { STORE_ADDRESS } from "../../../config";
-import { expo } from "../../../app.json";
 
-import {
-    SetCategoryList,
-    ShowModal,
-} from "../../../actions";
-import { getCategoryListQuery } from "../../../queries";
-import { addCategoryToDB, getCategoryListFromDB } from "../../../db_handler";
-import { HeaderTitle, HeaderCartButton } from "../../Header";
-import useFetch from "../../../network_handler";
+import { HeaderTitle, HeaderCartButton } from "~/components/Header";
 
 /**Список категорий товаров*/
 const CategoryList = (props) => {

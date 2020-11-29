@@ -1,12 +1,12 @@
 import React, { useContext, useEffect } from "react";
 import { useRoute, useNavigationState } from "@react-navigation/native";
 import { View, TouchableOpacity } from "react-native";
-import { Badge } from 'native-base';
-import { stateContext, dispatchContext } from "../../contexts";
-import OurText from "../OurText";
-import styles from "./styles.js";
 import { faChevronLeft, faShoppingBasket, faBoxOpen } from '@fortawesome/free-solid-svg-icons';
-import OurIconButton from "../OurIconButton";
+import { Badge } from 'native-base';
+import { stateContext, dispatchContext } from "~/contexts";
+import OurText from "~/components/OurText";
+import OurIconButton from "~/components/OurIconButton";
+import styles from "./styles.js";
 
 
 const isFirstRouteInParent = () => {

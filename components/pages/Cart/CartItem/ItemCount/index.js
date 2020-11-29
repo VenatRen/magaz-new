@@ -1,17 +1,17 @@
 import React, { useContext } from "react";
 import { View, Dimensions, Alert } from "react-native";
-import { dispatchContext } from "../../../../../contexts";
 import { faPlusCircle, faMinusCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import styles from "./styles";
+import { dispatchContext } from "~/contexts";
 import { useTranslation } from "react-i18next";
-import OurIconButton from "../../../../OurIconButton";
+import OurIconButton from "~/components/OurIconButton";
+import styles from "./styles";
 
 import {
     DeleteProductFromCart,
     DecreaseProductQuantity,
     IncreaseProductQuantity,
     ShowModal,
-} from "../../../../../actions";
+} from "~/actions";
 
 
 const size = Math.max(Dimensions.get("window").width, Dimensions.get("window").height) * .05;
@@ -19,7 +19,7 @@ const size = Math.max(Dimensions.get("window").width, Dimensions.get("window").h
 /** Компонент, который отображает количество товаров в корзине */
 const ItemCount = (props) => {
     const dispatch = useContext(dispatchContext);
-    const { productId, quantity } = props;
+    const { productId, quantity, onRemove } = props;
     const { t } = useTranslation();
 
     const deleteModalData = {
@@ -37,7 +37,13 @@ const ItemCount = (props) => {
             {
                 text: "ok",
                 onPress: (e) => {
-                    dispatch(DeleteProductFromCart(productId));
+
+                    if ( onRemove )
+                        onRemove( () => {
+                            dispatch(DeleteProductFromCart(productId));
+                        });
+                    else
+                        dispatch(DeleteProductFromCart(productId));
                 },
             }
         ],

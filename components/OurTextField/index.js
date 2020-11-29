@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { View, TextInput, LayoutAnimation, Platform, UIManager } from "react-native";
-import OurText from "../OurText";
+import OurText from "~/components/OurText";
 import styles from "./styles";
 
 if ( Platform.OS === "android" )

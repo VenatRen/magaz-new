@@ -1,29 +1,23 @@
 import React, { useState, useContext } from "react";
-import { Animated, Dimensions, View, TouchableOpacity } from "react-native";
-import { dispatchContext } from "../../../../contexts";
-import { ChangeOrderStatus, DeleteOrder } from "../../../../actions";
-import styles from "./styles";
-import OurText from "../../../OurText";
-import OurTextButton from "../../../OurTextButton";
-import OurImage from "../../../OurImage";
-import OurImageSlider from "../../../OurImageSlider";
-import { ListAnimation } from "../../../../Animations";
-import { STORE_ADDRESS } from "../../../../config";
+import { Animated, View, TouchableOpacity, LayoutAnimation } from "react-native";
+import { dispatchContext } from "~/contexts";
+import { ChangeOrderStatus, DeleteOrder } from "~/actions";
+import { STORE_ADDRESS } from "~/config";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
+import OurImage from "~/components/OurImage";
+import OurImageSlider from "~/components/OurImageSlider";
 import { statusToText, ORDER_STATUS_CANCELED } from "../orderStates";
-
-
-const itemWidth = Dimensions.get("window").width;
-const itemHeight = 168;
-const itemHeight2 = 152;
-const totalHeight = 440;
+import styles from "./styles";
 
 const MAX_IMAGES = 4;
-
-
+const ANIMATION_DURATION = 200;
 
 const OrderItem = (props) => {
     const dispatch = useContext(dispatchContext);
-    const { x, y, index, data, navigation } = props;
+    const { data, navigation } = props;
+    const [opacity, setOpacity] = useState(new Animated.Value(1));
+    const [height, setHeight] = useState(null);
 
     const images = Array.from(data.products.values()).map( (v, i) => {
         return `${STORE_ADDRESS}wp-content/uploads/${v.imageLink}`;
@@ -42,15 +36,23 @@ const OrderItem = (props) => {
         dispatch(ChangeOrderStatus(data.uuid, ORDER_STATUS_CANCELED));
     };
     const deleteOrder = (e) => {
-        dispatch(DeleteOrder(data.uuid));
+        LayoutAnimation.configureNext(LayoutAnimation.create(
+            ANIMATION_DURATION,
+            LayoutAnimation.Types.linear,
+            LayoutAnimation.Properties.scaleY,
+        ));
+        Animated.timing(opacity, {
+            toValue: 0,
+            duration: ANIMATION_DURATION,
+            useNativeDriver: true,
+        }).start(() => dispatch(DeleteOrder(data.uuid)));
+        setHeight(0.01);
     };
 
     const [gradStart, gradEnd] = ["#931DC4", "#F33BC8"];
 
-    const [translateX, translateY, scale, opacity] = ListAnimation(x, y, totalHeight, itemHeight2, itemWidth, index);
-
     return (
-        <Animated.View style={[styles.mainContainer, {height: itemHeight, width:itemWidth}, { opacity, transform: [{ translateX }, { scale }] }]}>
+        <Animated.View style={[styles.mainContainer, { opacity, height }]}>
             <View style={styles.topContainer}>
                 <View style={styles.infoContainer}>
                     <OurText style={styles.textField} translate={true}>orderStatus</OurText>

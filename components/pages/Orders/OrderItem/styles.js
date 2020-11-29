@@ -4,22 +4,27 @@ const styles = StyleSheet.create({
     mainContainer: {
         paddingHorizontal: 8,
         paddingBottom: 12,
+        overflow: "hidden",
     },
     topContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
+        overflow: "hidden",
     },
     infoContainer: {
         alignItems: "flex-start",
         justifyContent: "center",
+        overflow: "hidden",
     },
     infoContainerReversed: {
         alignItems: "flex-end",
         justifyContent: "center",
+        overflow: "hidden",
     },
     textField: {
         color: "#fffd",
         fontSize: 20,
+        overflow: "hidden",
     },
     text: {
         color: "#fff",
@@ -33,6 +38,7 @@ const styles = StyleSheet.create({
     },
     middleContainer: {
         flexDirection: "row-reverse",
+        overflow: "hidden",
     },
     productImage: {
         width: 64,
@@ -43,6 +49,7 @@ const styles = StyleSheet.create({
     bottomContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
+        overflow: "hidden",
     },
     button: {
         paddingHorizontal: 25,

@@ -1,14 +1,14 @@
 import React, { useState, useLayoutEffect } from "react";
 import { Animated, FlatList } from "react-native";
-import styles from "./styles";
 import { LinearGradient } from 'expo-linear-gradient';
-import { HeaderBackButton, HeaderCartButton, HeaderTitle } from "./../../Header/index";
+import { STORE_ADDRESS } from "~/config";
+import { getProductListQuery } from "~/queries";
+import useFetch from "~/network_handler";
+import { HeaderBackButton, HeaderCartButton, HeaderTitle } from "~/components/Header/index";
+import OurActivityIndicator from "~/components/OurActivityIndicator";
 import ProductsItem from './ProductsItem/index';
-import { STORE_ADDRESS } from "../../../config";
+import styles from "./styles";
 
-import { getProductListQuery } from "../../../queries";
-import OurActivityIndicator from "../../OurActivityIndicator";
-import useFetch from "../../../network_handler";
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
@@ -21,7 +21,7 @@ const LocallyAnimatedFlatList = ({data, refreshing, onRefresh}) => {
 
     const renderProductItem = ({item, index})=>{
         return (
-            <ProductsItem index={index} id={item.productId} data={item} x={x} y={y}
+            <ProductsItem index={index} id={item.databaseId} data={item} x={x} y={y}
             imageUrl={item.image?.mediaDetails?.file} name={item.name} />
         )
     };
@@ -34,7 +34,7 @@ const LocallyAnimatedFlatList = ({data, refreshing, onRefresh}) => {
             refreshing={refreshing}
             onRefresh={onRefresh}
             renderItem={ renderProductItem }
-            keyExtractor={item => String(item.productId)}
+            keyExtractor={item => String(item.databaseId)}
 
             {...{ onScroll }}
         />

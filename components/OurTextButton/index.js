@@ -1,6 +1,6 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import OurText from "../OurText";
+import OurText from "~/components/OurText";
 import styles from "./styles";
 
 const OurTextButton = (props) => {

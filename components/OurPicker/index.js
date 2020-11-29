@@ -1,8 +1,8 @@
 import React, { useContext, useState } from "react";
 import { View } from "react-native";
 import PickerModal from 'react-native-picker-modal-view';
-import PickerButton from "../PickerButton";
-import OurText from "..//OurText";
+import PickerButton from "~/components/PickerButton";
+import OurText from "~/components/OurText";
 import styles from "./styles";
 
 const OurPicker = (props) => {

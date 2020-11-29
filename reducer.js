@@ -36,18 +36,22 @@ const showToastMessage = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
 };
 
+// Начальный state
 export const initialState = {
+    // Данные модального окна
     modal: {
-        visible: false,
-        title: { text: "", params: {} },
-        text: { text: "", params: {} },
-        animationIn: "slideInRight",
-        animationOut: "slideOutLeft",
-        buttons: [],
+        visible: false, // Видимость окна
+        title: { text: "", params: {} }, // Заголовок
+        text: { text: "", params: {} }, // Текст
+        animationIn: "slideInRight", // Анимация появления
+        animationOut: "slideOutLeft", // Анимация исчезновения
+        buttons: [], // Кнопки
     },
-    cartItems: new Map(),
-    cartTotalPrice: 0,
-    orders: new Map(),
+    cartItems: new Map(), // Корзина
+    cartTotalPrice: 0, // Итоговая цена для корзины
+    orders: new Map(), // Список заказов
+
+    // Детали заказа
     deliveryDetails: {
         name: {
             name: "name",
@@ -93,6 +97,7 @@ export const initialState = {
  * Редюсер
  * @param  {object} state - объект state
  * @param  {object} action - объект action
+ * @returns {object}
  */
 export const reducer = (state, action) => {
     /**

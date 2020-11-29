@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { TouchableOpacity, ActivityIndicator, View } from "react-native";
-import OurText from "../OurText";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
 import styles from "./styles";
-import OurTextButton from "../OurTextButton";
 
 const OurActivityIndicator = (props) => {
     const { error, abortController, doRefresh, translate, params, buttonTextColor } = props;

@@ -1,10 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { View, StatusBar } from "react-native";
 import Modal from 'react-native-modal';
-import OurText from "../OurText";
-import OurTextButton from "../OurTextButton";
-import { stateContext, dispatchContext } from "../../contexts";
-import { CloseModal } from "../../actions";
+import { stateContext, dispatchContext } from "~/contexts";
+import { CloseModal } from "~/actions";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
 import styles from "./styles";
 
 const BACKDROP_OPACITY = .7;

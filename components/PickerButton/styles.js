@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
         textAlign: 'left',
     },
     icon: {
+        marginRight: 4,
         transform: [
             {rotate: '-90deg'}
         ],

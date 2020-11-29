@@ -1,6 +1,6 @@
 const ru = {
     translation: {
-        categoryListTitle: "Наш Магазин",
+        categoryListTitle: "Едопровод",
 
         activityAborted: "Действие отменено.",
         activityAbortedRefresh: "Обновить",

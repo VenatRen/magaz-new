@@ -2,12 +2,12 @@ import React, { useState, useContext, useLayoutEffect } from "react";
 import { View, ScrollView, KeyboardAvoidingView, Dimensions } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
-import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "../../Header";
-import { stateContext, dispatchContext } from "../../../contexts";
-import { ChangeDeliveryField } from "../../../actions";
-import OurText from "../../OurText";
-import OurTextButton from "../../OurTextButton";
-import OurTextField from "../../OurTextField";
+import { stateContext, dispatchContext } from "~/contexts";
+import { ChangeDeliveryField } from "~/actions";
+import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "~/components/Header";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
+import OurTextField from "~/components/OurTextField";
 import styles from "./styles";
 
 const DeliveryDetails = (props) => {

@@ -1,35 +1,28 @@
 import React, {useState, useContext, useLayoutEffect} from "react";
-import { stateContext } from "../../../contexts";
 import { View, FlatList, Animated } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { stateContext } from "~/contexts";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
+import { HeaderBackButton, HeaderTitle, HeaderOrdersButton } from "~/components/Header/index";
 import CartItem from "./CartItem";
 import CartTotal from "./CartTotal";
 import styles from "./styles";
-import { HeaderBackButton, HeaderTitle, HeaderOrdersButton } from "../../Header/index";
-import OurText from "../../OurText";
-import OurTextButton from "../../OurTextButton";
 
 const LocallyAnimatedFlatList = ({data}) => {
-    const [x, setX] = useState(new Animated.Value(0));
-    const [y, setY] = useState(new Animated.Value(0));
-    const onScroll = Animated.event([{ nativeEvent: { contentOffset: { x, y } } }], {
-        useNativeDriver: true,
-    });
 
     const renderItemsBlock = ({item, index}) => {
         return (
-            <CartItem x={x} y={y} index={index} productId={item.productId} name={item.name} price={item.price} productQuantity={item.productQuantity} imageLink={item.imageLink}/>
+            <CartItem productId={item.productId} name={item.name} price={item.price} productQuantity={item.productQuantity} imageLink={item.imageLink}/>
         );
     };
 
     return (
-        <Animated.FlatList
+        <FlatList
             contentContainerStyle={styles.cartList}
             data={data}
             renderItem={renderItemsBlock}
             keyExtractor={(item) => String(item.productId)}
-
-            {...{ onScroll }}
         />
     )
 };

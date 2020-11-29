@@ -1,6 +1,6 @@
 const en = {
     translation: {
-        categoryListTitle: "Our pretty magaz",
+        categoryListTitle: "Edoprovod",
 
         activityAborted: "Action canceled.",
         activityAbortedRefresh: "Refresh",

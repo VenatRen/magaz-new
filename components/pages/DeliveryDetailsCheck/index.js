@@ -1,15 +1,13 @@
 import React, { useContext, useLayoutEffect } from "react";
 import { View, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "../../Header";
-import { stateContext, dispatchContext } from "../../../contexts";
-import { AddOrderToList, ClearCart, ClearDeliveryDetails } from "../../../actions";
-import { ORDER_STATUS_TO_BE_SHIPPED } from "../Orders/orderStates";
 import uuid from "react-native-uuid";
-
-import OurText from "../../OurText";
-import OurTextButton from "../../OurTextButton";
-
+import { stateContext, dispatchContext } from "~/contexts";
+import { AddOrderToList, ClearCart, ClearDeliveryDetails } from "~/actions";
+import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "~/components/Header";
+import { ORDER_STATUS_TO_BE_SHIPPED } from "~/components/pages/Orders/orderStates";
+import OurText from "~/components/OurText";
+import OurTextButton from "~/components/OurTextButton";
 import styles from "./styles";
 
 const DeliveryDetailsItem = (props) => {

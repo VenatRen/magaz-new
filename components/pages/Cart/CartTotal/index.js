@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
+import OurText from "~/components/OurText";
 import styles from "./styles";
-import OurText from "../../../OurText";
 
 /** Компонент, который показывает итоговую цену */
 const CartTotal = (props) => {

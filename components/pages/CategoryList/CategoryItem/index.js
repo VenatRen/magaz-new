@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { View } from "react-native";
+import { STORE_ADDRESS } from "~/config";
+import { dispatchContext } from "~/contexts";
+import OurImage from "~/components/OurImage";
 import styles from "./styles";
-import { STORE_ADDRESS } from "../../../../config";
-import { dispatchContext } from "../../../../contexts";
-import OurImage from "../../../OurImage";
 
 
 /**Компонент категории */

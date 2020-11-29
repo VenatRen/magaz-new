@@ -15,7 +15,7 @@ import { SetCartProducts, SetOrderList } from "./actions";
 import OurModal from "./components/OurModal";
 import "./i18n";
 
-/**Контейнер приложения */
+/** Контейнер приложения **/
 const AppContainer = () => {
 	return (
 		<>
@@ -54,11 +54,13 @@ const App = () => {
 			const data = new Map();
 			result.rows["_array"].map( (v, i) => {
 				let products = new Map();
+				// Безопасно парсим товары
 				try {
 					const json = JSON.parse(v.products);
 					products = new Map(Object.entries(json));
 				} catch(err) { console.log("WTF", err) }
 
+				// Формируем данные для дальнейшей работы с ними
 				const order = {
 					id: v.id,
 					uuid: v.uuid,

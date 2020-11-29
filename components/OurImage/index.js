@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Image, TouchableOpacity } from "react-native";
-import { addImageToDB, getImageFromDB } from "../../db_handler";
-import OurText from "../OurText";
+import { addImageToDB, getImageFromDB } from "~/db_handler";
+import OurText from "~/components/OurText";
 import styles from "./styles";
 
-const placeholder = require("../../assets/image_placeholder.png");
+const placeholder = require("~/assets/image_placeholder.png");
 
 const OurImage = (props) => {
     const {url, title, onPress, style, disabled} = props;

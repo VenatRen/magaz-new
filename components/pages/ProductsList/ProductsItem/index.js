@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
 import { View, TouchableOpacity, Dimensions, Animated } from "react-native";
-import styles from "./styles";
-import { STORE_ADDRESS } from "../../../../config";
-import { dispatchContext } from "../../../../contexts";
-import OurText from "../../../OurText";
-import OurImage from "../../../OurImage";
 import { useTranslation } from "react-i18next";
-import { AddProductToCart } from "../../../../actions";
-import OurTextButton from "../../../OurTextButton";
-import { ListAnimation } from "../../../../Animations";
-import GalleryImg from "../../../Gallery";
-import OurPicker from "../../../OurPicker";
-import OurImageSlider from "../../../OurImageSlider";
+import { STORE_ADDRESS } from "~/config";
+import { dispatchContext } from "~/contexts";
+import { AddProductToCart } from "~/actions";
+import { ListAnimation } from "~/Animations";
+import OurText from "~/components/OurText";
+import OurImage from "~/components/OurImage";
+import OurTextButton from "~/components/OurTextButton";
+import GalleryImg from "~/components/Gallery";
+import OurPicker from "~/components/OurPicker";
+import OurImageSlider from "~/components/OurImageSlider";
+import styles from "./styles";
 
 
 const totalHeight = Dimensions.get("window").height;
@@ -40,11 +40,11 @@ const ProductsItem = (props) => {
     const buyProduct = (e, data) => {
 
         const productQuantity = 1;
-        const price = data.price ? data.price.match(/\d{1,5}.*\d*/)[0] : 0;
+        const price = data.price ? data.price.match(/([0-9]*)\.?([0-9]?)/)[0] : 0;
 
         // Заносим данные
         let payload = {
-            productId: data.productId,
+            productId: data.databaseId,
             name: data.name,
             productQuantity: productQuantity,
             price: price,
