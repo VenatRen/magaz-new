@@ -45,6 +45,8 @@ const ru = {
         orderStatusShipped: "Отправлен",
         orderStatusCanceled: "Отменён",
 
+        userCheckTitle: "Проверяем данные",
+
         productsTitle: "Товары",
         productPrice: "Цена: {{price}}",
         productFree: "Бесплатно",

@@ -9,16 +9,23 @@ const styles = StyleSheet.create({
         bottom: 0,
         minHeight: "100%",
     },
+    scrollView: {
+        width: "100%",
+    },
+    details: {
+        paddingHorizontal: 32,
+    },
     mainContainer: {
         height: "100%",
         paddingVertical: 20,
-        paddingHorizontal: 8,
         justifyContent: "space-between",
     },
     infoContainer: {
-        paddingHorizontal: 20,
         maxHeight: "90%",
     },
+    bottomContainer: {
+        paddingHorizontal: 16,
+    },  
 });
 
 export default styles;

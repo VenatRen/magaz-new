@@ -19,6 +19,7 @@ const LocallyAnimatedFlatList = ({data}) => {
 
     return (
         <FlatList
+            style={styles.flatList}
             contentContainerStyle={styles.cartList}
             data={data}
             renderItem={renderItemsBlock}
@@ -67,6 +68,7 @@ const Cart = (props) => {
                     }
                     <MemoedLocallyAnimatedFlatList data={Array.from(state.cartItems.values())}/>
                     <CartTotal total={state.cartTotalPrice} />
+                    <View style={styles.bottomContainer}>
                     <OurTextButton
                         translate={true}
                         disabled={!state.cartItems.size}
@@ -74,6 +76,7 @@ const Cart = (props) => {
                         style={styles.checkoutButton}
                         textStyle={{color: gradEnd}}
                         >cartCheckout</OurTextButton>
+                    </View>
                 </View>
         </>
     );

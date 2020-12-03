@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         bottom: 0,
-        minHeight: Dimensions.get("window").height,
+        minHeight: "100%",
     },
 });
 

@@ -49,3 +49,29 @@ Object.equals = ( x, y ) => {
 Math.clamp = (num, min, max) => {
 	return Math.min(Math.max(num, min), max);
 };
+
+/**
+ * Метод, который генерирует случайное целое число по заданному промежутку
+ * @param  {number} min - минимальное значение
+ * @param  {number} max - максимальное значение
+ * @returns {number}
+ */
+Math.randomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+/**
+ * Генерирует случайную строку заданной длины
+ * @param  {number} len - длина
+ * @returns {string}
+ */
+export const randomString = (len) => {
+    let result = "";
+    for ( let i = 0; i < len; i++ ) {
+        result += CHARS.charAt(Math.randomInt(0, len));
+    }
+    return result;
+};

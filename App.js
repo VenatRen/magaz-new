@@ -1,19 +1,20 @@
-import { enableScreens } from 'react-native-screens';
+import { enableScreens } from "react-native-screens";
 
 enableScreens();
 
 import React, { useReducer, useEffect } from "react";
-import { AppRegistry } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { AppRegistry } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
 import AppStackNavigator from "./navigation";
 import { expo } from "./app.json";
-import * as hehe from './utils';
+import "./utils";
 import { reducer, initialState } from "./reducer";
 import { stateContext, dispatchContext } from "./contexts";
-import { createDBTables, getCartFromDB, getOrdersFromDB } from "./db_handler";
-import { SetCartProducts, SetOrderList } from "./actions";
+import { addUserToDB, createDBTables, getCartFromDB, getOrdersFromDB, getUserData } from "./db_handler";
+import { SetCartProducts, SetOrderList, SetUserData } from "./actions";
 import OurModal from "./components/OurModal";
 import "./i18n";
+import { USER_STATUS_NOT_CHECKED, USER_STATUS_NOT_REGISTERED, USER_STATUS_REGISTERED } from "./userStatus";
 
 /** Контейнер приложения **/
 const AppContainer = () => {
@@ -33,6 +34,37 @@ const App = () => {
 	useEffect( () => {
 		createDBTables();
 
+		/**
+		 * Проверяем данные пользователя в бд
+		 */
+		console.log("hesd", state)
+		if ( state?.user?.status === USER_STATUS_NOT_CHECKED ) {
+			const data = {
+				status: USER_STATUS_NOT_CHECKED, // Состояние пользователя
+				uuid: "",
+				username: "",
+				email: "",
+				password: "",
+				jwtAuthToken: "",
+				jwtRefreshToken: "",
+			};
+			getUserData((tr, result) => {
+				if ( result.rows["_array"].length === 0 ) {
+					data.status = USER_STATUS_NOT_REGISTERED;
+				} else {
+					const user = result.rows["_array"][0];
+					data.status = USER_STATUS_REGISTERED;
+					data.uuid = user.uuid;
+					data.username = user.username;
+					data.email = user.email;
+					data.password = user.password;
+					data.jwtAuthToken = user.jwtAuthToken;
+					data.jwtRefreshToken = user.jwtRefreshToken;
+				}
+				dispatch(SetUserData(data));
+			});
+		}
+
 		/*
         * Подгружаем данные корзины из базы данных
         * */
@@ -42,11 +74,10 @@ const App = () => {
 				data.set(v.productId, v);
 			});
 			dispatch(SetCartProducts(data));
-		},
-		(err) => {
-			console.log("WELL SHIT", err)
+		}, (err) => {
+			console.log("WELL SHIT", err);
 		});
-
+		
 		/*
         * Подгружаем данные заказов из базы данных
         * */
@@ -79,9 +110,8 @@ const App = () => {
 				data.set(order.uuid, order);
 			});
 			dispatch(SetOrderList(data));
-		},
-		(err) => {
-			console.log("WELL SHIT", err)
+		}, (err) => {
+			console.log("WELL SHIT", err);
 		});
 	}, []);
 

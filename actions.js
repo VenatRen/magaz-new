@@ -18,6 +18,8 @@ import {
     ACTION_TYPE_MODAL_SHOW,
     ACTION_TYPE_MODAL_CLOSE,
     ACTION_TYPE_MODAL_TOGGLE,
+    ACTION_TYPE_USER_SET_DATA,
+    ACTION_TYPE_USER_SET_TOKENS,
 } from "./types.js"
 
 export const SetProductList = (products, id) => {
@@ -68,7 +70,7 @@ export const AddOrderToList = (data) => {
     return {type: ACTION_TYPE_ORDERS_ADD_TO_LIST, payload: data};
 };
 
-export const ChangeDeliveryField = (fieldName, value, valid) => {
+export const ChangeDeliveryField = (fieldName, value, valid=true) => {
     return {type: ACTION_TYPE_DELIVERY_CHANGE_FIELD, fieldName, payload: value, valid};
 };
 
@@ -94,4 +96,12 @@ export const CloseModal = () => {
 
 export const ToggleModal = (data={}) => {
     return {type: ACTION_TYPE_MODAL_TOGGLE, payload: data};
+};
+
+export const SetUserData = (data) => {
+    return {type: ACTION_TYPE_USER_SET_DATA, payload: data};
+};
+
+export const SetUserTokens = (data) => {
+    return {type: ACTION_TYPE_USER_SET_TOKENS, payload: data};
 };

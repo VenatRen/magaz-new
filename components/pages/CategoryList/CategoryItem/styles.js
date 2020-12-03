@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     },
     view: {
         margin: 10,
+        maxWidth: 110,
     },
     textView: {
         flex: 1,

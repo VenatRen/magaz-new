@@ -3,7 +3,7 @@ import { StyleSheet, Dimensions } from "react-native";
 const styles = StyleSheet.create({
     container: {
         alignSelf: "flex-end",
-        width: Dimensions.get("window").width / 2,
+        width: "50%",
         borderTopWidth: .5,
         borderColor: "#FFF",
         marginTop: 2,

@@ -1,7 +1,8 @@
 import React, { useContext, useLayoutEffect } from "react";
 import { View, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import uuid from "react-native-uuid";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from 'uuid';
 import { stateContext, dispatchContext } from "~/contexts";
 import { AddOrderToList, ClearCart, ClearDeliveryDetails } from "~/actions";
 import { HeaderBackButton, HeaderTitle, HeaderCartButton } from "~/components/Header";
@@ -44,16 +45,17 @@ const DeliveryDetailsCheck = (props) => {
     };
 
     const makeAnOrder = (e) => {
-        const orderData = {
+        /*const orderData = {
             deliveryDetails: {
                 name: state.deliveryDetails.name.value,
+                email: state.deliveryDetails.email.value,
                 phone: state.deliveryDetails.phone.value,
                 address: state.deliveryDetails.address.value,
                 floor: state.deliveryDetails.floor.value,
                 notes: state.deliveryDetails.notes.value,
                 time: state.deliveryDetails.time.value,
             },
-            uuid: uuid.v1(),
+            uuid: uuidv4(),
             status:  ORDER_STATUS_TO_BE_SHIPPED,
             products: state.cartItems,
             totalPrice: state.cartTotalPrice,
@@ -62,7 +64,8 @@ const DeliveryDetailsCheck = (props) => {
         dispatch(ClearCart());
         dispatch(ClearDeliveryDetails());
         navigation.popToTop();
-        navigation.navigate("Orders");
+        navigation.navigate("Orders");*/
+        navigation.navigate("UserCheck");
     };
 
     return (
@@ -79,6 +82,8 @@ const DeliveryDetailsCheck = (props) => {
             <ScrollView>
                 <DeliveryDetailsItem field={"orderFormName"}
                                      text={data.name}/>
+                <DeliveryDetailsItem field={"orderFormEmail"}
+                                     text={data.email}/>
                 <DeliveryDetailsItem field={"orderFormPhone"}
                                      text={data.phone}/>
                 <DeliveryDetailsItem field={"orderFormAddress"}

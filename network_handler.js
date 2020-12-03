@@ -10,7 +10,7 @@ export const DATA_TYPE_TEXT         = 4;
 const DEFAULT_OPTIONS = { method: "GET" }; // Опции fetch
 const EMPTY_FUNC = ()=>{};
 
-/*
+/**
  * Хук, для выполнения сетевых операций
  * @param {string} url - URL для отправки запроса
  * @param {object} options - опции запроса
@@ -19,7 +19,6 @@ const EMPTY_FUNC = ()=>{};
  * @param {function} - коллбэк при успешном запросе
  * @param {function} - коллбэк при ошибке
  * @param {function} - коллбэк при отмене
- * @returns {object/array}
  */
 const useFetch = (url,
                   options=DEFAULT_OPTIONS,

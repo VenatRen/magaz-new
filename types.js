@@ -17,3 +17,5 @@ export const ACTION_TYPE_ORDER_DELETE				= 16;
 export const ACTION_TYPE_MODAL_SHOW					= 17;
 export const ACTION_TYPE_MODAL_CLOSE				= 18;
 export const ACTION_TYPE_MODAL_TOGGLE				= 19;
+export const ACTION_TYPE_USER_SET_DATA				= 20;
+export const ACTION_TYPE_USER_SET_TOKENS			= 21;

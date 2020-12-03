@@ -21,6 +21,8 @@ import {
     ACTION_TYPE_MODAL_SHOW,
     ACTION_TYPE_MODAL_CLOSE,
     ACTION_TYPE_MODAL_TOGGLE,
+    ACTION_TYPE_USER_SET_TOKENS,
+    ACTION_TYPE_USER_SET_DATA,
 } from "./types";
 import {
     addProductToCartDB,
@@ -30,7 +32,11 @@ import {
     getDBOrders,
     updateOrderStatus,
     deleteOrderFromDB,
+    updateUserTokens,
 } from "./db_handler";
+import { USER_STATUS_NOT_CHECKED, USER_STATUS_REGISTERED, USER_STATUS_TOKEN_EXPIRED } from "./userStatus";
+import { STORE_ADDRESS } from "./config";
+import { getUserLoginQuery } from "./queries";
 
 const showToastMessage = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -51,6 +57,17 @@ export const initialState = {
     cartTotalPrice: 0, // Итоговая цена для корзины
     orders: new Map(), // Список заказов
 
+    // Данные пользователя
+    user: {
+        status: USER_STATUS_NOT_CHECKED, // Состояние пользователя
+        uuid: "",
+        username: "",
+        email: "",
+        password: "",
+        jwtAuthToken: "",
+        jwtRefreshToken: "",
+    },
+
     // Детали заказа
     deliveryDetails: {
         name: {
@@ -62,6 +79,12 @@ export const initialState = {
         phone: {
             name: "phone",
             placeholder: "orderFormPhone",
+            value: "",
+            valid: false,
+        },
+        email: {
+            name: "email",
+            placeholder: "orderFormEmail",
             value: "",
             valid: false,
         },
@@ -77,17 +100,17 @@ export const initialState = {
             value: "",
             valid: true,
         },
-        notes: {
-            name: "notes",
-            placeholder: "orderFormNotes",
-            value: "",
-            valid: true,
-        },
         time: {
             name: "time",
             placeholder: "orderFormDeliveryTime",
             value: "",
             valid: false,
+        },
+        notes: {
+            name: "notes",
+            placeholder: "orderFormNotes",
+            value: "",
+            valid: true,
         },
     },
     allDetailsAreValid: false,
@@ -343,11 +366,11 @@ export const reducer = (state, action) => {
             let valid = true;
 
             newState.deliveryDetails[fieldName].value = action.payload;
-            newState.deliveryDetails[fieldName].valid = true;
+            newState.deliveryDetails[fieldName].valid = action.valid;
 
             for ( const [fn, data] of Object.entries(newState.deliveryDetails) ) {
                 if ( !data.valid )
-                    valid = true;
+                    valid = false;
             }
             newState.allDetailsAreValid = valid;
 
@@ -363,6 +386,12 @@ export const reducer = (state, action) => {
                 name: {
                     name: "name",
                     placeholder: "orderFormName",
+                    value: "",
+                    valid: false,
+                },
+                email: {
+                    name: "email",
+                    placeholder: "orderFormPhone",
                     value: "",
                     valid: false,
                 },
@@ -462,6 +491,56 @@ export const reducer = (state, action) => {
             newState.modal.visible = !newState.modal.visible;
 
             return newState;
+        }
+
+        /**
+         * Заносит данные пользователя из бд
+         */
+        case ACTION_TYPE_USER_SET_DATA: {
+            const newState = {...state};
+            const { payload } = action;
+
+            if ( payload ) {
+                newState.user = payload;
+
+                // Если данные в бд есть, то получаем свежие токены
+                if ( payload.status === USER_STATUS_REGISTERED || payload.status === USER_STATUS_TOKEN_EXPIRED ) {
+                    ( async () => {
+                        try {
+                            const res = await fetch(`${STORE_ADDRESS}graphql`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: getUserLoginQuery(payload.uuid, payload.username, payload.password),
+                            });
+                            const data = await res.json();
+                            newState.user.jwtAuthToken = data.jwtAuthToken;
+                            newState.user.jwtRefreshToken = data.jwtRefreshToken;
+                            newState.user.status = USER_STATUS_LOGGED;
+                            updateUserTokens(payload.uuid, payload.jwtAuthToken, payload.jwtRefreshToken);
+                        } catch {}
+                    })();
+                }
+                return newState;
+            }
+            return state;
+        }
+
+        /**
+         * Обновляет токены пользователя
+         */
+        case ACTION_TYPE_USER_SET_TOKENS: {
+            const newState = {...state};
+            const { payload } = action;
+
+            if ( payload ) {
+                newState.jwtAuthToken = payload.jwtAuthToken;
+                newState.jwtRefreshToken = payload.jwtRefreshToken;
+                updateUserTokens(payload.uuid, payload.jwtAuthToken, payload.jwtRefreshToken);
+                return newState;
+            }
+            return state;
         }
 
         default:

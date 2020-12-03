@@ -31,6 +31,7 @@ const en = {
         orderInfoCheckOrder: "Make an order",
         orderFormName: "Name",
         orderFormPhone: "Phone number",
+        orderFormEmail: "Email",
         orderFormAddress: "Address",
         orderFormFloor: "Floor",
         orderFormNotes: "Notes",
@@ -44,6 +45,8 @@ const en = {
         orderStatusToBeShipped: "To be shipped",
         orderStatusShipped: "Shipped",
         orderStatusCanceled: "Canceled",
+        
+        userCheckTitle: "Checking user data",
 
         productsTitle: "Products",
         productPrice: "Price: {{price}}{{currency}}",

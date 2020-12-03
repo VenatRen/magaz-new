@@ -10,7 +10,7 @@ if ( Platform.OS === "android" )
 const VALIDATE_TIME = 1100;
 
 const OurTextField = (props) => {
-    const { name, validateTime, defValue, placeholder, onValidate, onChange } = props;
+    const { name, validateTime, defValue, placeholder, onValidate, onChange, autoCompleteType, keyboardType } = props;
 
     const [text, setText] = useState(defValue || "");
     const [isFocused, setFocus] = useState(text || false);
@@ -53,6 +53,8 @@ const OurTextField = (props) => {
                        onChangeText={onChangeText}
                        onFocus={onFocus}
                        onBlur={onBlur}
+                       autoCompleteType={autoCompleteType}
+                       keyboardType={keyboardType}
                        value={text}/>
         </View>
     )   
