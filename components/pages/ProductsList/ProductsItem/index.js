@@ -59,7 +59,7 @@ const ProductsItem = (props) => {
         dispatch(AddProductToCart(payload, dispatch, t));
     };
     const onImagePress = (e, index) => {
-        setPage(index);
+        setPage(index + 1);
         toggleModal();
     };
 
